@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { useRef, useState, useEffect, ReactNode } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import styles from './ServiceCard.module.css';
+import type { ReactNode } from 'react';
 
 interface Props {
     title: string;
