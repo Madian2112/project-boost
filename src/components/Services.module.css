@@ -28,3 +28,16 @@
     justify-content: center;
     justify-items: center;
 }
+
+.ServiceGradient{
+
+    background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+p{
+    font-weight: bold;
+    color: #ffffff;
+}

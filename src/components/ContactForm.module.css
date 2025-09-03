@@ -53,3 +53,8 @@
     transform: scale(1.02);
     box-shadow: 0 10px 25px rgba(142, 45, 226, 0.3);
 }
+
+label{
+    color: #ffffff;
+    font-weight: bold;
+}

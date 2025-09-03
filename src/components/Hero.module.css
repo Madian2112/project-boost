@@ -49,11 +49,9 @@
 }
 
 .visual .placeholder {
-    height: 400px;
-    width: 100%;
-    background: linear-gradient(135deg, var(--bg-secondary), #1e2530);
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
+    height: 450px;
+    width: 90%;
+    content: url(../../public/assets/icons/trace.svg);
 }
 
 @media (max-width: 992px) {
@@ -93,4 +91,17 @@
         padding: 0.8rem 2rem;
         font-size: 0.9rem;
     }
+}
+
+.gradient {
+  font-size: larger;
+  background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.TitleGradient{
+  background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;  
 }

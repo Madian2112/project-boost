@@ -86,7 +86,7 @@
 .mobileLink {
     font-family: var(--font-serif);
     font-size: 2rem;
-    color: var(--text-primary);
+    color: #ffffff !important;
     transition: color 0.3s ease;
 }
 
@@ -112,4 +112,15 @@
     .hamburger {
         display: block;
     }
+}
+
+.spanBold{
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.gradient{
+    background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

@@ -3,12 +3,13 @@ import { FadeIn } from './FadeIn';
 import { ContactForm } from './ContactForm';
 import styles from './Contact.module.css';
 
+
 export const Contact = () => {
     return (
         <section className={styles.section} id="contacto">
             <div className={styles.container}>
                 <FadeIn>
-                    <h2>¿Listo para empezar tu proyecto?</h2>
+                    <h2 className={styles.ServiceGradient}>¿Listo para empezar tu proyecto?</h2>
                     <p>
                         Envíanos un mensaje. Estaremos encantados de escuchar tu idea y ayudarte a llevar tu proyecto al siguiente nivel.
                     </p>
@@ -17,7 +18,7 @@ export const Contact = () => {
                             <Instagram size={24} />
                             <span>Instagram</span>
                         </a>
-                        <a href="mailto:#" className={styles.socialLink}>
+                        <a href="mailto:projectboosthn@gmail.com" className={styles.socialLink}>
                             <Mail size={24} />
                             <span>Gmail</span>
                         </a>

@@ -27,7 +27,7 @@ export const Header = () => {
                 <div className={styles.container}>
                     <a href="/" className={styles.logo}>
                         <img src="/assets/icons/logo_title.ico" alt="Project Boost Logo" className={styles.logoIcon} />
-                        <span>Project <span className="text-gradient">Boost</span></span>
+                        <span className={styles.spanBold}>Project <span className={styles.gradient}>Boost</span></span>
                     </a>
                     <nav className={styles.desktopNav}>
                         <a href="#inicio">Inicio</a>

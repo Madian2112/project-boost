@@ -42,7 +42,7 @@ export const Services = () => {
             <div className={styles.container}>
                 <FadeIn>
                     <div className={styles.titleWrapper}>
-                        <h2>Nuestros Servicios</h2>
+                        <h2 className = {styles.ServiceGradient}>Nuestros Servicios</h2>
                         <p>Ofrecemos una gama completa de soluciones para tus proyectos universitarios.</p>
                     </div>
                 </FadeIn>
