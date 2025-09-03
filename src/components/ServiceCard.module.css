@@ -1,0 +1,61 @@
+.card {
+    background-color: #000000;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: left;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(142, 45, 226, 0.5);
+    box-shadow: 0 0 25px rgba(142, 45, 226, 0.4);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at var(--x) var(--y), rgba(142, 45, 226, 0.2), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: none;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.iconWrapper {
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.cardsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 1.5rem;
+    }
+
+    .card h3 {
+        font-size: 1.3rem;
+    }
+}
