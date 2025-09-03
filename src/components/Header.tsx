@@ -32,7 +32,6 @@ export const Header = () => {
                     <nav className={styles.desktopNav}>
                         <a href="#inicio">Inicio</a>
                         <a href="#servicios">Servicios</a>
-                        <a href="#proyectos">Proyectos</a>
                         <a href="#contacto">Contacto</a>
                     </nav>
                     <button className={styles.hamburger} onClick={toggleMenu} aria-label="Abrir menú">
@@ -47,7 +46,6 @@ export const Header = () => {
                 <div className={styles.mobileNav}>
                     <a href="#inicio" className={styles.mobileLink} onClick={closeMenu}>Inicio</a>
                     <a href="#servicios" className={styles.mobileLink} onClick={closeMenu}>Servicios</a>
-                    <a href="#proyectos" className={styles.mobileLink} onClick={closeMenu}>Proyectos</a>
                     <a href="#contacto" className={styles.mobileLink} onClick={closeMenu}>Contacto</a>
                 </div>
             </div>
