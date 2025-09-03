@@ -1,12 +1,6 @@
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import styles from './ContactForm.module.css';
-import {
-  EMAIL_SERVICE_ID,
-  EMAIL_TEAM_TEMPLATE_ID,
-  EMAIL_USER_TEMPLATE_ID,
-  EMAIL_PUBLIC_KEY,
-} from "../../env/env";
 
 export const ContactForm = () => {
     const form = useRef<HTMLFormElement>(null);
@@ -22,10 +16,10 @@ export const ContactForm = () => {
         }
 
         // --- Asegúrate de que estas variables de entorno estén definidas ---
-        const serviceID = EMAIL_SERVICE_ID;
-        const teamTemplateID = EMAIL_TEAM_TEMPLATE_ID;   // Plantilla para tu equipo
-        const userTemplateID = EMAIL_USER_TEMPLATE_ID;   // Plantilla para el usuario
-        const publicKey = EMAIL_PUBLIC_KEY;
+        const serviceID = import.meta.env.VITE_EMAIL_SERVICE_ID;
+        const teamTemplateID = import.meta.env.VITE_EMAIL_TEAM_TEMPLATE_ID;   // Plantilla para tu equipo
+        const userTemplateID = import.meta.env.VITE_EMAIL_USER_TEMPLATE_ID;   // Plantilla para el usuario
+        const publicKey = import.meta.env.VITE_EMAIL_KEY;
         // ----------------------------------------------------------------
 
         emailjs.sendForm(serviceID, teamTemplateID, currentForm, publicKey)
