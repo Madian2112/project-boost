@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Sitemap: https://project-boost.com/sitemap.xml
+
+# Allow all bots to access everything
+User-agent: Googlebot
+Allow: /
+User-agent: Googlebot-Image
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: DuckDuckBot
+Allow: /
+
+# Prevent bots from crawling certain directories
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /.git/
+
+# Crawl delay for better server performance
+Crawl-delay: 1
