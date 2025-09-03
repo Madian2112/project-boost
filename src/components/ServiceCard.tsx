@@ -44,7 +44,7 @@ export const ServiceCard = ({ title, description, icon }: Props) => {
             style={cardStyle}
         >
             <div className={styles.iconWrapper}>{icon}</div>
-            <h3>{title}</h3>
+            <h3 className={styles.serviceTitle}>{title}</h3>
             <p>{description}</p>
         </motion.div>
     );

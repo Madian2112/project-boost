@@ -8,7 +8,8 @@ export const Hero = () => {
             <div className={styles.container}>
                 <div className={styles.content}>
                     <FadeIn>
-                        <h1>Tu proyecto universitario, <br /><span className="text-gradient">nuestra pasión y experiencia.</span></h1>
+                        <h1>Project Boost | Ayuda con Proyectos Universitarios de Programación</h1>
+                        <h2 className="text-gradient">Tu proyecto universitario, nuestra pasión y experiencia.</h2>
                         <p>
                             Transformamos tus ideas en proyectos de programación exitosos. Desde simples tareas hasta complejas aplicaciones, estamos aquí para ayudarte a destacar.
                         </p>
