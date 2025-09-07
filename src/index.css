@@ -74,6 +74,12 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+@media (max-width: 768px) {
+    html {
+        font-size: 90%; /* Reduce el tamaño de fuente base para móviles */
+    }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -88,12 +94,12 @@ button:focus-visible {
 }
 
 @media (max-width: 480px) {
-    h1, .content h1 {
-        font-size: 2rem;
+    h1 {
+        font-size: 2.2rem;
     }
 
-    h2, .section h2 {
-        font-size: 1.8rem;
+    h2 {
+        font-size: 1.9rem;
     }
 
     section {

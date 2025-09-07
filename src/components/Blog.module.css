@@ -10,7 +10,6 @@
 
 .titleWrapper {
     text-align: center;
-    margin-bottom: 4rem;
 }
 
 .titleWrapper h2 {
@@ -23,13 +22,27 @@
 .titleWrapper p {
     font-size: 1.1rem;
     max-width: 60ch;
-    margin: 0 auto;
+    margin: 0 auto 2.5rem;
 }
 
-.cardsContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+.viewAllWrapper {
+    text-align: center;
+}
+
+.viewAllButton {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+}
+
+.viewAllButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.4);
 }
 
 @media (max-width: 768px) {

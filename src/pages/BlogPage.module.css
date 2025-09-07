@@ -1,0 +1,74 @@
+.page {
+    padding-top: 5rem; /* Espacio para el header fijo */
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.titleWrapper {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.titleWrapper h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.titleWrapper p {
+    font-size: 1.2rem;
+    max-width: 65ch;
+    margin: 0 auto;
+    color: var(--text-secondary);
+}
+
+.postsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+
+/* Reutilizamos los estilos de las tarjetas del Blog de la página principal */
+.postCard {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.postCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.postCard h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.postCard p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 0; /* Ajustado al quitar el link */
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 4rem 1rem;
+    }
+    .titleWrapper h1 {
+        font-size: 2.8rem;
+    }
+}

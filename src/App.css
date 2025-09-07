@@ -42,5 +42,5 @@
 }
 
 main {
-    padding-top: 85px; /* Ajuste para el header fijo */
+    /* padding-top: 85px; */ /* Eliminado para un control más granular por sección */
 }

@@ -1,32 +1,22 @@
-import { motion } from 'framer-motion';
 import { FadeIn } from './FadeIn';
 import styles from './Hero.module.css';
 
 export const Hero = () => {
     return (
-        <section className={styles.section} id="inicio">
+        <section className={styles.hero} id="inicio">
             <div className={styles.container}>
-                <div className={styles.content}>
-                    <FadeIn>
-                        <h1>Project Boost | Ayuda con Proyectos Universitarios de Programación</h1>
-                        <h2 className="text-gradient">Tu proyecto universitario, nuestra pasión y experiencia.</h2>
-                        <p>
-                            Transformamos tus ideas en proyectos de programación exitosos. Desde simples tareas hasta complejas aplicaciones, estamos aquí para ayudarte a destacar.
-                        </p>
-                        <a href="#contacto" className={styles.cta}>Contáctanos Ahora</a>
-                    </FadeIn>
-                </div>
-                <div className={styles.visual}>
-                     <motion.div
-                        className={styles.placeholder}
-                        animate={{ y: [0, -15, 0] }}
-                        transition={{
-                            duration: 8,
-                            ease: "easeInOut",
-                            repeat: Infinity,
-                        }}
-                    />
-                </div>
+                <FadeIn>
+                    <h1 className={styles.title}>
+                        Transformamos <span className={styles.highlight}>ideas</span> en soluciones digitales
+                    </h1>
+                    <p className={styles.description}>
+                        Desarrollamos aplicaciones web y sistemas personalizados que impulsan el crecimiento de tu negocio con tecnología de vanguardia.
+                    </p>
+                    <div className={styles.buttonGroup}>
+                        <a href="#servicios" className={styles.ctaButton}>Nuestros Servicios</a>
+                        <a href="#contacto" className={`${styles.ctaButton} ${styles.outlineButton}`}>Contáctanos</a>
+                    </div>
+                </FadeIn>
             </div>
         </section>
     );

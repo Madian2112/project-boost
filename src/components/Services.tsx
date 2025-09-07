@@ -26,12 +26,12 @@ const services = [
     },
     {
         title: "Sistemas de Información",
-        description: "Construimos sistemas de información completos para gestionar y procesar datos de manera efectiva en tu organización.",
+        description: "Construimos sistemas de información a medida para gestionar y procesar datos de manera efectiva en tu organización.",
         icon: <Briefcase size={40} />
     },
     {
         title: "Documentación Técnica",
-        description: "Cada proyecto incluye una documentación clara y completa para que entiendas a fondo el trabajo realizado.",
+        description: "Entregamos cada proyecto con documentación clara y completa para facilitar su mantenimiento y futuras expansiones.",
         icon: <FileText size={40} />
     }
 ];
@@ -43,7 +43,7 @@ export const Services = () => {
                 <FadeIn>
                     <div className={styles.titleWrapper}>
                         <h2>Nuestros Servicios</h2>
-                        <p>Ofrecemos una gama completa de soluciones para tus proyectos universitarios.</p>
+                        <p>Ofrecemos una gama completa de soluciones tecnológicas para llevar tu negocio al siguiente nivel.</p>
                     </div>
                 </FadeIn>
                 <div className={styles.cardsContainer}>
