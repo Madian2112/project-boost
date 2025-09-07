@@ -146,3 +146,14 @@
         margin-top: 1rem;
     }
 }
+
+.spanBold{
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.gradient{
+    background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

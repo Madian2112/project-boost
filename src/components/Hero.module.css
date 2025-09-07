@@ -107,3 +107,16 @@
         max-width: 300px;
     }
 }
+
+.gradient {
+  font-size: larger;
+  background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.TitleGradient{
+  background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;  
+}

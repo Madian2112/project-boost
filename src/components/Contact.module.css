@@ -85,3 +85,10 @@
         font-size: 2.5rem;
     }
 }
+
+
+.ServiceGradient{
+  background: -webkit-linear-gradient(#ffffff, #646cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
