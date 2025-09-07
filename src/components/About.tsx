@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Target, Eye, Bot, Linkedin, Github } from 'lucide-react';
+import { Target, Eye, Bot, Linkedin, Github } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import styles from './About.module.css';
 

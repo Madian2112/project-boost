@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import { ContactForm } from './ContactForm';
 import styles from './Contact.module.css';

@@ -3,6 +3,15 @@ import { ChevronDown } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import styles from './Faq.module.css';
 
+interface FaqItemProps {
+    item: {
+      question: string;
+      answer: string;
+    };
+    isOpen: boolean;
+    onClick: () => void;
+}
+
 const faqData = [
     {
         question: "¿En qué tipos de proyectos pueden ayudarme?",
@@ -18,19 +27,22 @@ const faqData = [
     }
 ];
 
-const FaqItem = ({ item, isOpen, onClick }) => {
+const FaqItem = ({ item, isOpen, onClick }: FaqItemProps) => {
     return (
-        <div className={styles.faqItem}>
-            <button className={styles.faqQuestion} onClick={onClick}>
-                <span>{item.question}</span>
-                <ChevronDown className={`${styles.chevron} ${isOpen ? styles.open : ''}`} size={24} />
-            </button>
-            <div className={`${styles.faqAnswer} ${isOpen ? styles.open : ''}`}>
-                <p>{item.answer}</p>
-            </div>
+      <div className={styles.faqItem}>
+        <button className={styles.faqQuestion} onClick={onClick}>
+          <span>{item.question}</span>
+          <ChevronDown
+            className={`${styles.chevron} ${isOpen ? styles.open : ""}`}
+            size={24}
+          />
+        </button>
+        <div className={`${styles.faqAnswer} ${isOpen ? styles.open : ""}`}>
+          <p>{item.answer}</p>
         </div>
+      </div>
     );
-};
+  };
 
 export const Faq = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
