@@ -163,9 +163,6 @@
     .aboutContent {
         grid-template-columns: 1fr;
     }
-    .illustration {
-        display: none; /* Ocultar en pantallas más pequeñas para mejor layout */
-    }
 }
 
 @media (max-width: 768px) {

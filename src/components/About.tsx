@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Target, Eye, Bot, Linkedin, Github } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import styles from './About.module.css';
@@ -27,6 +27,25 @@ const teamMembers = [
 
 export const About = () => {
     const [activeTab, setActiveTab] = useState('mision');
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+    const DivBot = () => {
+        return (
+          <div className={styles.illustration}>
+            <FadeIn>
+              <Bot size={isMobile ? 150 : 200} strokeWidth={1} />
+            </FadeIn>
+          </div>
+        );
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+          setIsMobile(window.innerWidth < 992);
+        };
+    
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     return (
         <section className={styles.section} id="nosotros">
@@ -40,6 +59,7 @@ export const About = () => {
                 </FadeIn>
 
                 <div className={styles.aboutContent}>
+                        {isMobile && <DivBot/>}
                     <div className={styles.whoWeAre}>
                         <FadeIn>
                             <h3>Quiénes Somos</h3>
@@ -69,11 +89,7 @@ export const About = () => {
                             </div>
                         </FadeIn>
                     </div>
-                    <div className={styles.illustration}>
-                        <FadeIn>
-                            <Bot size={200} strokeWidth={1} />
-                        </FadeIn>
-                    </div>
+                       {!isMobile && <DivBot/>}
                 </div>
 
                 {/* --- Nuestro Equipo --- */}
