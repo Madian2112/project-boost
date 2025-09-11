@@ -1,4 +1,4 @@
-import type { Handler, HandlerEvent } from "@netlify/functions";
+import type { Handler } from "@netlify/functions";
 import { HfInference } from "@huggingface/inference";
 import knowledgeBase from "../../src/data/knowledgeBase";
 
@@ -21,45 +21,49 @@ const systemPrompt = `
 // Combinamos el prompt del sistema con la base de conocimiento para el modelo.
 const fullSystemPrompt = `${systemPrompt}\n\nAquí está la base de conocimiento:\n---\n${knowledgeBase}\n---`;
 
-const handler: Handler = async (event: HandlerEvent) => {
+// Usamos la sintaxis de Netlify para streaming
+export const handler: Handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
-
   if (!HF_TOKEN) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Hugging Face token not configured' }) };
   }
-  
-  try {
-    const { question } = JSON.parse(event.body || "{}");
 
-    if (!question) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'No question provided' }) };
-    }
-
-    const hf = new HfInference(HF_TOKEN);
-    
-    // Usamos el método de chat completion de Hugging Face
-    const response = await hf.chatCompletion({
-      model: "meta-llama/Meta-Llama-3-8B-Instruct",
-      messages: [
-        { role: "system", content: fullSystemPrompt },
-        { role: "user", content: question }
-      ],
-      max_tokens: 500,
-    });
-
-    const answer = response.choices[0].message.content || "Lo siento, no pude generar una respuesta.";
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ answer }),
-    };
-
-  } catch (error) {
-    console.error("Error en la función serverless:", error);
-    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to get a response from the AI' }) };
+  const { question } = JSON.parse(event.body || "{}");
+  if (!question) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'No question provided' }) };
   }
-};
 
-export { handler };
+  const hf = new HfInference(HF_TOKEN);
+
+  const stream = hf.chatCompletionStream({
+    model: "meta-llama/Meta-Llama-3-8B-Instruct",
+    messages: [
+      { role: "system", content: fullSystemPrompt },
+      { role: "user", content: question }
+    ],
+    max_tokens: 500,
+  });
+
+  const readable = new ReadableStream({
+    async start(controller) {
+      const encoder = new TextEncoder();
+      for await (const chunk of stream) {
+        if (chunk.choices && chunk.choices[0].delta.content) {
+          const content = chunk.choices[0].delta.content;
+          controller.enqueue(encoder.encode(content));
+        }
+      }
+      controller.close();
+    },
+  });
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "text/event-stream",
+    },
+    body: readable,
+  };
+};
