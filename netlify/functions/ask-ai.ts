@@ -77,11 +77,12 @@ export const handler: Handler = async (event) => {
       aiJson = { answered: false, response: fallbackMessage };
     }
 
+    // Lógica de email basada en el booleano
     if (aiJson.answered === false) {
       // -- INICIO DE DEBUGGING --
       console.log("Condición cumplida. Intentando enviar email de notificación...");
       // -- FIN DE DEBUGGING --
-      sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
+      await sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
     }
 
     return {
