@@ -1,8 +1,9 @@
 import type { Handler } from "@netlify/functions";
 import { HfInference } from "@huggingface/inference";
+import { Resend } from "resend";
 import knowledgeBase from "../../src/data/knowledgeBase";
 
-const { HF_TOKEN } = process.env;
+const { HF_TOKEN, RESEND_API_KEY, CEO_EMAILS } = process.env;
 
 const fallbackMessage = "Actualmente no contamos con esa informacion en nuestra pagina, pero le daremos a conocer tu consulta a los CEO de Project Boost para poderte brindar una respuesta";
 
@@ -23,8 +24,8 @@ export const handler: Handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
-  if (!HF_TOKEN) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'Hugging Face token not configured' }) };
+  if (!HF_TOKEN || !RESEND_API_KEY || !CEO_EMAILS) {
+    return { statusCode: 500, body: JSON.stringify({ error: 'Environment variables not configured correctly' }) };
   }
 
   try {
@@ -43,6 +44,13 @@ export const handler: Handler = async (event) => {
 
     const answer = response.choices[0].message.content || "Lo siento, no pude generar una respuesta.";
 
+    // Lógica para enviar el email si la respuesta es el fallback
+    if (answer.trim() === fallbackMessage) {
+      // Usamos 'await' pero no bloqueamos la respuesta al usuario. 
+      // Netlify Functions permite que esto se complete en segundo plano.
+      sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ answer }),
@@ -56,3 +64,47 @@ export const handler: Handler = async (event) => {
     };
   }
 };
+
+// Función auxiliar para enviar el email
+async function sendNotificationEmail(question: string, ceoEmails: string, resendApiKey: string) {
+  const resend = new Resend(resendApiKey);
+
+  // Generar saludo dinámico
+  const hour = new Date().getHours();
+  let greeting = "Buenos días";
+  if (hour >= 12 && hour < 19) {
+    greeting = "Buenas tardes";
+  } else if (hour >= 19 || hour < 5) {
+    greeting = "Buenas noches";
+  }
+
+  // Formatear la fecha
+  const date = new Date().toLocaleDateString('es-ES', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const emailBody = `
+    <p>${greeting} CEO de Project Boost,</p>
+    <p>El día <strong>${date}</strong>, un usuario le hizo una consulta a nuestro bot BoostBot de la cual no se tiene la información suficiente en el sitio web para brindarle una respuesta.</p>
+    <p>Te dejo la consulta del usuario por aquí:</p>
+    <blockquote style="border-left: 4px solid #ccc; padding-left: 16px; margin: 16px 0; color: #555;">
+      ${question}
+    </blockquote>
+    <p>Espero pronto podás agregar información referente a esa consulta, ¡ten un excelente día!</p>
+  `;
+
+  try {
+    await resend.emails.send({
+      from: 'BoostBot <onboarding@resend.dev>', // Requerido por Resend en plan gratuito
+      to: ceoEmails.split(','),
+      subject: 'BoostBot: Consulta de Usuario sin Respuesta',
+      html: emailBody,
+    });
+    console.log("Email de notificación enviado exitosamente.");
+  } catch (emailError) {
+    console.error("Error enviando el email de notificación:", emailError);
+  }
+}
