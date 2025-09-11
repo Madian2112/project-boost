@@ -60,17 +60,27 @@ export const handler: Handler = async (event) => {
 
     const rawResponse = hfResponse.choices[0].message.content || "{}";
     
-    // Parsear la respuesta JSON de la IA
+    // -- INICIO DE DEBUGGING --
+    console.log("Respuesta cruda de la IA:", rawResponse);
+    // -- FIN DE DEBUGGING --
+    
     let aiJson: { answered: boolean; response: string };
     try {
       aiJson = JSON.parse(rawResponse);
+       // -- INICIO DE DEBUGGING --
+      console.log("JSON parseado exitosamente:", aiJson);
+      // -- FIN DE DEBUGGING --
     } catch (e) {
-      // Si la IA no devuelve un JSON válido, asumimos que no se pudo responder
+      // -- INICIO DE DEBUGGING --
+      console.error("Error al parsear el JSON de la IA. Asumiendo fallback.", e);
+      // -- FIN DE DEBUGGING --
       aiJson = { answered: false, response: fallbackMessage };
     }
 
-    // Lógica de email basada en el booleano
     if (aiJson.answered === false) {
+      // -- INICIO DE DEBUGGING --
+      console.log("Condición cumplida. Intentando enviar email de notificación...");
+      // -- FIN DE DEBUGGING --
       sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
     }
 
