@@ -45,7 +45,7 @@ export const handler: Handler = async (event) => {
     const answer = response.choices[0].message.content || "Lo siento, no pude generar una respuesta.";
 
     // Lógica para enviar el email si la respuesta es el fallback
-    if (answer.trim() === fallbackMessage) {
+    if (answer.trim().includes("Actualmente no contamos con esa informacion")) {
       // Usamos 'await' pero no bloqueamos la respuesta al usuario. 
       // Netlify Functions permite que esto se complete en segundo plano.
       sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
