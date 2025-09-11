@@ -8,14 +8,30 @@ const { HF_TOKEN, RESEND_API_KEY, CEO_EMAILS } = process.env;
 const fallbackMessage = "Actualmente no contamos con esa informacion en nuestra pagina, pero le daremos a conocer tu consulta a los CEO de Project Boost para poderte brindar una respuesta";
 
 const systemPrompt = `
-  Eres un asistente virtual experto de la empresa "Project Boost".
-  Tu nombre es "BoostBot".
-  Tu única fuente de información es la base de conocimiento que te proporciono a continuación.
-  NUNCA debes inventar información que no esté en este texto.
-  Tu objetivo es responder a las preguntas del usuario de forma amable y precisa, basándote exclusivamente en la información de la base de conocimiento.
-  Si la respuesta a la pregunta del usuario se encuentra en la base de conocimiento, responde de forma clara y concisa.
-  Si la respuesta a la pregunta del usuario NO se encuentra en la base de conocimiento, DEBES responder única y exclusivamente con el siguiente mensaje, sin añadir nada más:
-  "${fallbackMessage}"
+  Eres un asistente virtual experto de la empresa "Project Boost". Tu nombre es "BoostBot".
+  Tu única fuente de información es la base de conocimiento que te proporciono. NUNCA debes inventar información.
+  Tu tarea es analizar la pregunta del usuario y determinar si se puede responder con la base de conocimiento.
+  Debes devolver SIEMPRE tu respuesta en un formato JSON VÁLIDO, con dos campos: "answered" (un booleano) y "response" (un string).
+
+  - Si la pregunta del usuario SE PUEDE responder con la base de conocimiento:
+    Establece "answered" en true.
+    En el campo "response", escribe la respuesta de forma clara y amable.
+
+  - Si la pregunta del usuario NO SE PUEDE responder con la base de conocimiento:
+    Establece "answered" en false.
+    En el campo "response", escribe el siguiente texto EXACTAMENTE: "${fallbackMessage}"
+
+  Ejemplo de respuesta si puedes contestar:
+  {
+    "answered": true,
+    "response": "El equipo está formado por Jason Villanueva y Dany Franco, ambos CEO y Desarrolladores Full Stack."
+  }
+
+  Ejemplo de respuesta si NO puedes contestar:
+  {
+    "answered": false,
+    "response": "${fallbackMessage}"
+  }
 `;
 
 const fullSystemPrompt = `${systemPrompt}\n\nAquí está la base de conocimiento:\n---\n${knowledgeBase}\n---`;
@@ -36,24 +52,31 @@ export const handler: Handler = async (event) => {
 
     const hf = new HfInference(HF_TOKEN);
 
-    const response = await hf.chatCompletion({
+    const hfResponse = await hf.chatCompletion({
       model: "meta-llama/Meta-Llama-3-8B-Instruct",
       messages: [{ role: "system", content: fullSystemPrompt }, { role: "user", content: question }],
       max_tokens: 500,
     });
 
-    const answer = response.choices[0].message.content || "Lo siento, no pude generar una respuesta.";
+    const rawResponse = hfResponse.choices[0].message.content || "{}";
+    
+    // Parsear la respuesta JSON de la IA
+    let aiJson: { answered: boolean; response: string };
+    try {
+      aiJson = JSON.parse(rawResponse);
+    } catch (e) {
+      // Si la IA no devuelve un JSON válido, asumimos que no se pudo responder
+      aiJson = { answered: false, response: fallbackMessage };
+    }
 
-    // Lógica para enviar el email si la respuesta es el fallback
-    if (answer.trim().includes("Actualmente no contamos con esa informacion")) {
-      // Usamos 'await' pero no bloqueamos la respuesta al usuario. 
-      // Netlify Functions permite que esto se complete en segundo plano.
+    // Lógica de email basada en el booleano
+    if (aiJson.answered === false) {
       sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ answer }),
+      body: JSON.stringify({ answer: aiJson.response }),
     };
 
   } catch (error) {
