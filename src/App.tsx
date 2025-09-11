@@ -5,6 +5,7 @@ import { BackgroundAnimation } from './components/BackgroundAnimation';
 import { HomePage } from './pages/HomePage';
 import { BlogPage } from './pages/BlogPage';
 import { ScrollToTop } from './components/ScrollToTop';
+import { Chatbot } from './components/Chatbot';
 import './App.css';
 
 const MainLayout = () => (
@@ -20,6 +21,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <BackgroundAnimation />
+      <Chatbot />
       <main>
         <Routes>
           <Route element={<MainLayout />}>
