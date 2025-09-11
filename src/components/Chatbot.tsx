@@ -40,8 +40,6 @@ export const Chatbot = () => {
         setMessages((prev) => [...prev, userMessage]);
         if (input) setInput('');
         setIsLoading(true);
-        // Añadimos un mensaje de bot vacío que se irá llenando
-        setMessages((prev) => [...prev, { author: 'bot', content: '' }]);
 
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
@@ -50,27 +48,21 @@ export const Chatbot = () => {
                 body: JSON.stringify({ question: messageContent }),
             });
 
-            if (!response.body) throw new Error("No response body");
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let done = false;
-
-            while (!done) {
-                const { value, done: readerDone } = await reader.read();
-                done = readerDone;
-                const chunk = decoder.decode(value, { stream: true });
-                
-                setMessages((prevMessages) => {
-                    const lastMessage = prevMessages[prevMessages.length - 1];
-                    const updatedLastMessage = { ...lastMessage, content: lastMessage.content + chunk };
-                    return [...prevMessages.slice(0, -1), updatedLastMessage];
-                });
+            if (!response.ok) {
+                // Capturamos errores de red o errores 500 del servidor aquí
+                const errorData = await response.json().catch(() => ({ error: 'Error desconocido al procesar la respuesta' }));
+                throw new Error(errorData.error || 'La respuesta de la red no fue correcta');
             }
 
+            const data = await response.json();
+            const botMessage = { author: 'bot' as const, content: data.answer };
+            setMessages((prev) => [...prev, botMessage]);
+
         } catch (error) {
-            console.error("Error fetching bot response:", error);
-            setMessages((prev) => [...prev, { author: 'bot', content: 'Lo siento, algo salió mal. Por favor, intenta de nuevo.' }]);
+            console.error("Error al obtener la respuesta del bot:", error);
+            const errorMessageContent = error instanceof Error ? error.message : 'Lo siento, algo salió mal. Por favor, intenta de nuevo.';
+            const errorMessage = { author: 'bot' as const, content: errorMessageContent };
+            setMessages((prev) => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
         }

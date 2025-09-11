@@ -35,29 +35,17 @@ export const handler: Handler = async (event) => {
 
     const hf = new HfInference(HF_TOKEN);
 
-    const stream = hf.chatCompletionStream({
+    const response = await hf.chatCompletion({
       model: "meta-llama/Meta-Llama-3-8B-Instruct",
       messages: [{ role: "system", content: fullSystemPrompt }, { role: "user", content: question }],
       max_tokens: 500,
     });
 
-    const readable = new ReadableStream({
-      async start(controller) {
-        const encoder = new TextEncoder();
-        for await (const chunk of stream) {
-          if (chunk.choices && chunk.choices[0].delta.content) {
-            const content = chunk.choices[0].delta.content;
-            controller.enqueue(encoder.encode(content));
-          }
-        }
-        controller.close();
-      },
-    });
+    const answer = response.choices[0].message.content || "Lo siento, no pude generar una respuesta.";
 
     return {
       statusCode: 200,
-      headers: { "Content-Type": "text/event-stream" },
-      body: readable,
+      body: JSON.stringify({ answer }),
     };
 
   } catch (error) {
