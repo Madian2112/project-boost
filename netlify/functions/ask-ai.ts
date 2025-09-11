@@ -100,6 +100,12 @@ export const handler: Handler = async (event) => {
 
 // Función auxiliar para enviar el email
 async function sendNotificationEmail(question: string, ceoEmails: string, resendApiKey: string) {
+  // -- INICIO DE DEBUGGING AVANZADO --
+  console.log("Iniciando sendNotificationEmail...");
+  console.log("Emails de CEO:", ceoEmails);
+  console.log("Longitud de la Resend API Key:", resendApiKey ? resendApiKey.length : 0);
+  // -- FIN DE DEBUGGING AVANZADO --
+
   const resend = new Resend(resendApiKey);
 
   // Generar saludo dinámico
@@ -130,14 +136,27 @@ async function sendNotificationEmail(question: string, ceoEmails: string, resend
   `;
 
   try {
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'BoostBot <onboarding@resend.dev>', // Requerido por Resend en plan gratuito
       to: ceoEmails.split(','),
       subject: 'BoostBot: Consulta de Usuario sin Respuesta',
       html: emailBody,
     });
-    console.log("Email de notificación enviado exitosamente.");
+
+    if (error) {
+      // -- INICIO DE DEBUGGING AVANZADO --
+      console.error("Error devuelto por la API de Resend:", error);
+      // -- FIN DE DEBUGGING AVANZADO --
+      return;
+    }
+
+    // -- INICIO DE DEBUGGING AVANZADO --
+    console.log("Email enviado exitosamente. ID de Resend:", data?.id);
+    // -- FIN DE DEBUGGING AVANZADO --
+    
   } catch (emailError) {
-    console.error("Error enviando el email de notificación:", emailError);
+    // -- INICIO DE DEBUGGING AVANZADO --
+    console.error("Error catastrófico al intentar enviar el email:", emailError);
+    // -- FIN DE DEBUGGING AVANZADO --
   }
 }
