@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://project-boost.com/sitemap.xml
+Sitemap: https://projectboost.tech/sitemap.xml
 
 # Allow all bots to access everything
 User-agent: Googlebot

@@ -2,6 +2,16 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-573RTRG7');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta name="google-site-verification" content="qqHWDYrC5rlnSFIv9R3iKWWv7UJ5SYqItnLDwwUva2c" />
+
     <!-- Favicons -->
     <link rel="icon" media="(prefers-color-scheme: light)" href="/assets/icons/logo_web.ico" />
     <link rel="icon" media="(prefers-color-scheme: dark)" href="/assets/icons/logo_title.ico" />
@@ -11,10 +21,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     
-    <!-- Prevención de cacheo de buscadores -->
+    <!-- Configuración de bots -->
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -27,32 +36,40 @@
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="/assets/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/assets/css/critical.css" as="style">
+    <link rel="stylesheet" href="/assets/css/critical.css">
     
-    <!-- Cache Control -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <!-- Cache Control optimizado para producción -->
+    <meta http-equiv="Cache-Control" content="public, max-age=3600">
+    
     <title>Desarrollo de Software a Medida | Soluciones Digitales | Project Boost</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Expertos en desarrollo de software a medida. Creamos aplicaciones web, sistemas personalizados y soluciones digitales que impulsan el crecimiento de tu negocio." />
-    <meta name="keywords" content="desarrollo de software, aplicaciones web, sistemas a medida, soluciones digitales, transformación digital, desarrollo de producto, startup, empresa" />
+    <meta name="keywords" content="desarrollo de software, aplicaciones web, sistemas a medida, soluciones digitales, transformación digital, desarrollo de producto, startup, empresa, paginas web" />
     <meta name="author" content="Project Boost" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://project-boosthn.netlify.app/" />
+    <meta property="og:url" content="https://projectboost.tech/" />
     <meta property="og:title" content="Project Boost | Desarrollo de Software y Soluciones Digitales a Medida" />
     <meta property="og:description" content="Transformamos ideas en soluciones digitales. Desarrollo de software, aplicaciones web y sistemas personalizados para potenciar el crecimiento de tu negocio." />
-    <!-- Twitter -->
+    <meta property="og:image" content="https://projectboost.tech/assets/images/og-image-1200x630.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Project Boost - Desarrollo de Software a Medida" />
+    <meta property="og:site_name" content="Project Boost" />
+    <meta property="og:locale" content="es_HN" />
 
+    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://project-boosthn.netlify.app/" />
+    <meta property="twitter:url" content="https://projectboost.tech/" />
     <meta property="twitter:title" content="Project Boost | Desarrollo de Software y Soluciones Digitales a Medida" />
     <meta property="twitter:description" content="Transformamos ideas en soluciones digitales. Desarrollo de software, aplicaciones web y sistemas personalizados para potenciar el crecimiento de tu negocio." />
+    <meta property="twitter:image" content="https://projectboost.tech/assets/images/twitter-card-1200x675.jpg" />
+    <meta property="twitter:image:alt" content="Project Boost - Expertos en Desarrollo de Software" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://project-boosthn.netlify.app/" />
+    <link rel="canonical" href="https://projectboost.tech/" />
 
     <!-- Additional Meta Tags -->
     <meta name="robots" content="index, follow" />
@@ -60,7 +77,23 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="theme-color" content="#000000" />
 
-    <!-- JSON-LD Datos Estructurados -->
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://projectboost.tech/"
+        }
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD Datos Estructurados CORREGIDO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -70,22 +103,27 @@
       "description": "Servicio profesional especializado en desarrollo de software a medida. Expertos en aplicaciones web, sistemas de información y transformación digital para empresas y startups.",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://project-boosthn.netlify.app/assets/icons/logo_web.ico"
+        "url": "https://projectboost.tech/assets/icons/logo_web.ico"
       },
-      "url": "https://project-boost.com",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://projectboost.tech/assets/images/hero-image.jpg"
+      },
+      "url": "https://projectboost.tech",
       "telephone": "+50412345678",
-      "email": "contacto@project-boost.com",
+      "email": "projectboosthn@gmail.com",
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "ES",
-        "addressRegion": "Madrid",
-        "addressLocality": "Madrid"
+        "addressCountry": "HN",
+        "addressRegion": "Cortés",
+        "addressLocality": "San Pedro Sula",
+        "streetAddress": "San Pedro Sula, Honduras"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": "40.4168",
-        "longitude": "-3.7038"
+        "latitude": "15.5048",
+        "longitude": "-88.0251"
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
@@ -158,10 +196,10 @@
         "@type": "GeoCircle",
         "geoMidpoint": {
           "@type": "GeoCoordinates",
-          "latitude": "40.4168",
-          "longitude": "-3.7038"
+          "latitude": "15.5048",
+          "longitude": "-88.0251"
         },
-        "geoRadius": "5000"
+        "geoRadius": "50000"
       },
       "sameAs": [
         "https://facebook.com/projectboost",
@@ -189,7 +227,8 @@
             "@type": "Person",
             "name": "María García"
           },
-          "reviewBody": "Excelente servicio, me ayudaron a lanzar el MVP de mi startup y superaron todas las expectativas."
+          "reviewBody": "Excelente servicio, me ayudaron a lanzar el MVP de mi startup y superaron todas las expectativas.",
+          "datePublished": "2024-01-15"
         }
       ],
       "keywords": [
@@ -235,6 +274,14 @@
             "@type": "Answer",
             "text": "Sí, ofrecemos garantía de satisfacción en todos nuestros servicios. Trabajamos de cerca contigo para asegurar que el producto final cumpla con todos los requisitos y exceda tus expectativas de calidad."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Trabajan con empresas internacionales?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, trabajamos con clientes tanto locales como internacionales. Ofrecemos servicios remotos y nos adaptamos a diferentes zonas horarias para brindar el mejor servicio."
+          }
         }
       ]
     }
@@ -258,7 +305,7 @@
         "@type": "ContactPoint",
         "contactType": "customer service",
         "telephone": "+50412345678",
-        "email": "contacto@project-boost.com",
+        "email": "projectboosthn@gmail.com",
         "availableLanguage": ["Spanish", "English"]
       },
       "slogan": "Transformamos ideas en soluciones digitales de alto impacto.",
@@ -275,6 +322,10 @@
     </script>
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-573RTRG7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
