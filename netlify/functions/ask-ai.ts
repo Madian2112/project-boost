@@ -138,7 +138,7 @@ async function sendNotificationEmail(question: string, ceoEmails: string, resend
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'BoostBot <onboarding@resend.dev>', // Requerido por Resend en plan gratuito
+      from: 'BoostBot <bot@projectboost.tech>',
       to: ceoEmails.split(','),
       subject: 'BoostBot: Consulta de Usuario sin Respuesta',
       html: emailBody,
