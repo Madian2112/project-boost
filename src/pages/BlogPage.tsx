@@ -1,32 +1,27 @@
-import { FadeIn } from '../components/FadeIn';
-import styles from './BlogPage.module.css';
+import { Link } from 'react-router-dom';
 import { blogPosts } from '../data/blogPosts';
+import styles from './BlogPage.module.css';
 import { MinimalHeader } from '../components/MinimalHeader';
+import { Footer } from '../components/Footer';
 
 export const BlogPage = () => {
     return (
         <>
             <MinimalHeader />
-            <main className={styles.page}>
-                <div className={styles.container}>
-                    <FadeIn>
-                        <div className={styles.titleWrapper}>
-                            <h1>Nuestro Blog</h1>
-                            <p>Un espacio para compartir conocimiento, explorar tecnologías y discutir las últimas tendencias en el desarrollo de software.</p>
-                        </div>
-                    </FadeIn>
-                    <div className={styles.postsGrid}>
-                        {blogPosts.map((post, index) => (
-                            <FadeIn key={index} delay={(index + 1) * 0.1}>
-                                <div className={styles.postCard}>
-                                    <h3>{post.title}</h3>
-                                    <p>{post.excerpt}</p>
-                                </div>
-                            </FadeIn>
-                        ))}
-                    </div>
+            <section className={styles.container}>
+                <h1 className={styles.pageTitle}>Nuestro Blog</h1>
+                <p className={styles.pageSubtitle}>Ideas, tutoriales y reflexiones sobre tecnología y desarrollo de software.</p>
+                <div className={styles.postsGrid}>
+                    {blogPosts.map(post => (
+                        <Link to={`/blog/${post.slug}`} key={post.slug} className={styles.postCard}>
+                            <h2 className={styles.postTitle}>{post.title}</h2>
+                            <p className={styles.postExcerpt}>{post.excerpt}</p>
+                            <span className={styles.readMore}>Leer más &rarr;</span>
+                        </Link>
+                    ))}
                 </div>
-            </main>
+            </section>
+            <Footer />
         </>
     );
 };

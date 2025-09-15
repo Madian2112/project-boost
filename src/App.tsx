@@ -7,6 +7,7 @@ import { BlogPage } from './pages/BlogPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Chatbot } from './components/Chatbot';
 import './App.css';
+import { BlogPostPage } from './pages/BlogPostPage';
 
 const MainLayout = () => (
   <>
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
           </Route>
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
         </Routes>
       </main>
     </Router>

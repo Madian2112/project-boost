@@ -61,9 +61,9 @@ export const Footer = () => {
                         ))}
                     </div>
                 </div>
-                <div className={styles.bottomBar}>
+                {/*<div className={styles.bottomBar}>
                     <p>&copy; {new Date().getFullYear()} Project Boost. Todos los derechos reservados.</p>
-                </div>
+                </div>*/}
             </div>
         </footer>
     );

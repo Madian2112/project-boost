@@ -53,7 +53,7 @@ export const Chatbot = () => {
 
             if (!response.ok) {
                 // Capturamos errores de red o errores 500 del servidor aquí
-                throw new Error('La respuesta de la red no fue correcta');
+                throw new Error('Ocurrió un error al obtener la respuesta del bot. Por favor, intenta de nuevo.');
             }
 
             const data = await response.json(); // Ahora 'data' es { isImportantLead, responseForUser }

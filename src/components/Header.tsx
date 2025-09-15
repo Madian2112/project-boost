@@ -34,7 +34,6 @@ export const Header = () => {
                         <a href="/#servicios" onClick={closeMenu}>Servicios</a>
                         <a href="/#nosotros" onClick={closeMenu}>Nosotros</a>
                         <NavLink to="/blog" onClick={closeMenu}>Blog</NavLink>
-                        <a href="/#contacto" onClick={closeMenu}>Contacto</a>
                         <a href="/#contacto" className={`${styles.contactButton} ${styles.mobileOnly}`} onClick={closeMenu}>
                             Contáctanos
                         </a>
