@@ -154,7 +154,8 @@
     border-top: 1px solid var(--border-color);
 }
 
-.chatInputForm input {
+.chatInputForm input,
+.emailFormContainer input {
     flex-grow: 1;
     padding: 0.75rem;
     border: 1px solid var(--border-color);
@@ -162,6 +163,10 @@
     background-color: #2a2a2a;
     color: var(--chatbot-text-dark);
     outline: none;
+    font-size: 16px; /* Evita el zoom automático en iOS */
+}
+
+.chatInputForm input {
     margin-right: 0.5rem;
 }
 
@@ -205,16 +210,6 @@
 .emailFormContainer form {
     display: flex;
     gap: 0.5rem;
-}
-
-.emailFormContainer input {
-    flex-grow: 1;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #2a2a2a;
-    color: var(--chatbot-text-dark);
-    outline: none;
 }
 
 .emailFormContainer button {
