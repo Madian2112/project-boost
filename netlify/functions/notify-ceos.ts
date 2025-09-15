@@ -44,13 +44,15 @@ export const handler: Handler = async (event) => {
 
     // 2. Si el usuario dejó su email, enviarle la confirmación
     if (userEmail) {
-      const userEmailBody = `
-        <p>¡Hola! Soy BoostBot, un gusto saludarte.</p>
-        <p>Gracias por tu consulta: "<em>${question}</em>"</p>
-        <p>Pronto el equipo de Project Boost se pondrá en contacto contigo para darle seguimiento.</p>
-        <p>Gracias por preferirnos.</p>
+        const userEmailBody = `
+        <p>👋 ¡Hola!</p>
+        <p>Soy <strong>BoostBot</strong> y es un gusto saludarte.</p>
+        <p>Hemos recibido tu consulta: "<em>${question}</em>" 📝</p>
+        <p>En breve, el equipo de <strong>Project Boost</strong> se pondrá en contacto contigo para darle seguimiento.</p>
+        <p>✨ ¡Gracias por confiar en nosotros!</p>
         <hr>
-        <p>Si tienes alguna otra duda, puedes contactarte directamente con ellos a través de <a href="mailto:projectboosthn@gmail.com">projectboosthn@gmail.com</a>.</p>
+        <p>📩 Si tienes otra duda, puedes escribirnos directamente a <a href="mailto:projectboosthn@gmail.com">projectboosthn@gmail.com</a>.</p>
+        <p>Saludos cordiales, <br> El equipo de Project Boost</p>
       `;
       await resend.emails.send({
         from: 'Project Boost <bot@projectboost.tech>',
