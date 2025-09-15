@@ -10,9 +10,11 @@ const suggestedQuestions = [
 
 export const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<{ author: 'user' | 'bot'; content: string }[]>([]);
+    const [messages, setMessages] = useState<{ author: 'user' | 'bot'; content: string | React.ReactNode }[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [promptForEmail, setPromptForEmail] = useState(false);
+    const [lastQuestion, setLastQuestion] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -40,6 +42,7 @@ export const Chatbot = () => {
         setMessages((prev) => [...prev, userMessage]);
         if (input) setInput('');
         setIsLoading(true);
+        setLastQuestion(messageContent); // Guardamos la pregunta
 
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
@@ -55,8 +58,14 @@ export const Chatbot = () => {
             }
 
             const data = await response.json();
-            const botMessage = { author: 'bot' as const, content: data.answer };
-            setMessages((prev) => [...prev, botMessage]);
+            const aiJson = JSON.parse(data.answer.match(/\{[\s\S]*\}/)?.[0] || "{}");
+
+            if (aiJson.isImportantLead) {
+                setMessages(prev => [...prev, { author: 'bot', content: aiJson.responseForUser }]);
+                setPromptForEmail(true); // Activamos el formulario de email
+            } else {
+                setMessages(prev => [...prev, { author: 'bot', content: aiJson.responseForUser }]);
+            }
 
         } catch (error) {
             console.error("Error al obtener la respuesta del bot:", error);
@@ -71,6 +80,31 @@ export const Chatbot = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         handleSendMessage(input);
+    };
+
+    const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const userEmail = e.currentTarget.email.value;
+        
+        setPromptForEmail(false);
+        setMessages(prev => [...prev, { author: 'bot', content: "¡Gracias! Hemos recibido tu correo. El equipo se pondrá en contacto contigo pronto." }]);
+
+        await fetch('/.netlify/functions/notify-ceos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: lastQuestion, userEmail }),
+        });
+    };
+
+    const handleSkipEmail = async () => {
+        setPromptForEmail(false);
+        setMessages(prev => [...prev, { author: 'bot', content: "Entendido. Si cambias de opinión, siempre puedes contactarnos directamente." }]);
+
+        await fetch('/.netlify/functions/notify-ceos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: lastQuestion }), // Enviamos sin email
+        });
     };
 
     return (
@@ -108,19 +142,30 @@ export const Chatbot = () => {
                         )}
                         <div ref={messagesEndRef} />
                     </div>
-                    <form onSubmit={handleSubmit} className={styles.chatInputForm}>
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Haz una pregunta..."
-                            aria-label="Escribe tu mensaje"
-                            disabled={isLoading}
-                        />
-                        <button type="submit" disabled={isLoading || !input.trim()}>
-                            <Send size={20} />
-                        </button>
-                    </form>
+                    {promptForEmail ? (
+                        <div className={styles.emailFormContainer}>
+                            <p>Para darte una respuesta detallada, ¿te gustaría dejarnos tu email? (Opcional)</p>
+                            <form onSubmit={handleEmailSubmit}>
+                                <input type="email" name="email" placeholder="tu@email.com" required />
+                                <button type="submit">Enviar Email</button>
+                            </form>
+                            <button onClick={handleSkipEmail} className={styles.skipButton}>No, gracias</button>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className={styles.chatInputForm}>
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Haz una pregunta..."
+                                aria-label="Escribe tu mensaje"
+                                disabled={isLoading}
+                            />
+                            <button type="submit" disabled={isLoading || !input.trim()}>
+                                <Send size={20} />
+                            </button>
+                        </form>
+                    )}
                 </div>
             )}
         </div>

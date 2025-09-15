@@ -29,7 +29,7 @@ const systemPrompt = `
 
      - **Si la pregunta SÍ es importante:**
        - "isImportantLead": true
-       - "responseForUser": Responde con sinceridad que no tienes esa información específica, pero que has notificado al equipo. Usa este texto EXACTO: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?"
+       - "responseForUser": Responde con sinceridad que no tienes esa información específica, pero que has notificado al equipo. Usa este texto EXACTO: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado al equipo de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?"
 
   Base de Conocimiento:
   ---
@@ -71,11 +71,11 @@ export const handler: Handler = async (event) => {
         aiJson = JSON.parse(jsonMatch[0]);
       } catch (e) {
         // Si el JSON extraído sigue siendo inválido, caemos en el fallback
-        aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
+        aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado al equipo de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
       }
     } else {
       // Si no se encuentra ningún JSON en la respuesta, es un fallo y notificamos
-      aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
+      aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado al equipo de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
     }
 
     if (aiJson.isImportantLead === true) {

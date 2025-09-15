@@ -188,3 +188,55 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.emailFormContainer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--chatbot-header-bg);
+    text-align: center;
+}
+
+.emailFormContainer p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+}
+
+.emailFormContainer form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.emailFormContainer input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #2a2a2a;
+    color: var(--chatbot-text-dark);
+    outline: none;
+}
+
+.emailFormContainer button {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent-gradient);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.skipButton {
+    background-color: transparent !important;
+    color: var(--text-secondary) !important;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.skipButton:hover {
+    text-decoration: underline;
+}
