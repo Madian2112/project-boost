@@ -31,17 +31,17 @@ export const Header = () => {
                         <span>Project <span className={styles.logoAccent}>Boost</span></span>
                     </Link>
                     <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ''}`}>
-                        <NavLink to="/#servicios" onClick={closeMenu}>Servicios</NavLink>
-                        <NavLink to="/#nosotros" onClick={closeMenu}>Nosotros</NavLink>
+                        <a href="/#servicios" onClick={closeMenu}>Servicios</a>
+                        <a href="/#nosotros" onClick={closeMenu}>Nosotros</a>
                         <NavLink to="/blog" onClick={closeMenu}>Blog</NavLink>
-                        <NavLink to="/#contacto" onClick={closeMenu}>Contacto</NavLink>
-                        <Link to="/#contacto" className={`${styles.contactButton} ${styles.mobileOnly}`} onClick={closeMenu}>
+                        <a href="/#contacto" onClick={closeMenu}>Contacto</a>
+                        <a href="/#contacto" className={`${styles.contactButton} ${styles.mobileOnly}`} onClick={closeMenu}>
                             Contáctanos
-                        </Link>
+                        </a>
                     </nav>
-                    <Link to="/#contacto" className={`${styles.contactButton} ${styles.desktopOnly}`}>
+                    <a href="/#contacto" className={`${styles.contactButton} ${styles.desktopOnly}`}>
                         Contáctanos
-                    </Link>
+                    </a>
                     <button className={styles.hamburger} onClick={toggleMenu} aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}>
                         {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
                     </button>
