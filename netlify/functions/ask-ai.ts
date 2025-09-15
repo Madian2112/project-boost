@@ -62,10 +62,20 @@ export const handler: Handler = async (event) => {
     const rawResponse = hfResponse.choices[0].message.content || "{}";
     
     let aiJson: { isImportantLead: boolean; responseForUser: string };
-    try {
-      aiJson = JSON.parse(rawResponse);
-    } catch (e) {
-      aiJson = { isImportantLead: false, responseForUser: "Lo siento, tuve un problema para procesar tu solicitud." };
+
+    // Buscamos el JSON dentro de la respuesta cruda
+    const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+
+    if (jsonMatch && jsonMatch[0]) {
+      try {
+        aiJson = JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        // Si el JSON extraído sigue siendo inválido, caemos en el fallback
+        aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
+      }
+    } else {
+      // Si no se encuentra ningún JSON en la respuesta, es un fallo y notificamos
+      aiJson = { isImportantLead: true, responseForUser: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?" };
     }
 
     if (aiJson.isImportantLead === true) {
