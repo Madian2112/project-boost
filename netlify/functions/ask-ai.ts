@@ -84,7 +84,7 @@ export const handler: Handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ answer: aiJson.responseForUser }),
+      body: JSON.stringify(aiJson),
     };
 
   } catch (error) {

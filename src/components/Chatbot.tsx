@@ -41,8 +41,8 @@ export const Chatbot = () => {
         const userMessage = { author: 'user' as const, content: messageContent };
         setMessages((prev) => [...prev, userMessage]);
         if (input) setInput('');
-        setIsLoading(true);
         setLastQuestion(messageContent); // Guardamos la pregunta
+        setIsLoading(true);
 
         try {
             const response = await fetch('/.netlify/functions/ask-ai', {
@@ -53,18 +53,16 @@ export const Chatbot = () => {
 
             if (!response.ok) {
                 // Capturamos errores de red o errores 500 del servidor aquí
-                const errorData = await response.json().catch(() => ({ error: 'Error desconocido al procesar la respuesta' }));
-                throw new Error(errorData.error || 'La respuesta de la red no fue correcta');
+                throw new Error('La respuesta de la red no fue correcta');
             }
 
-            const data = await response.json();
-            const aiJson = JSON.parse(data.answer.match(/\{[\s\S]*\}/)?.[0] || "{}");
+            const data = await response.json(); // Ahora 'data' es { isImportantLead, responseForUser }
 
-            if (aiJson.isImportantLead) {
-                setMessages(prev => [...prev, { author: 'bot', content: aiJson.responseForUser }]);
+            if (data.isImportantLead) {
+                setMessages(prev => [...prev, { author: 'bot', content: data.responseForUser }]);
                 setPromptForEmail(true); // Activamos el formulario de email
             } else {
-                setMessages(prev => [...prev, { author: 'bot', content: aiJson.responseForUser }]);
+                setMessages(prev => [...prev, { author: 'bot', content: data.responseForUser }]);
             }
 
         } catch (error) {
