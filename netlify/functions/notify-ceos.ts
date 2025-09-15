@@ -27,21 +27,6 @@ export const handler: Handler = async (event) => {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
 
-    // 1. Enviar notificación a los CEOs
-    const ceoEmailBody = `
-      <p>Hola CEOs de Project Boost,</p>
-      <p>El día <strong>${date}</strong>, un usuario realizó una consulta importante para la cual el bot no tenía respuesta.</p>
-      ${userEmail ? `<p>El usuario ha dejado su email para seguimiento: <strong>${userEmail}</strong></p>` : '<p>El usuario ha decidido no dejar su email de contacto.</p>'}
-      <p><strong>Pregunta original del usuario:</strong></p>
-      <blockquote style="border-left: 4px solid #ccc; padding-left: 16px; margin: 16px 0;">${question}</blockquote>
-    `;
-    await resend.emails.send({
-      from: 'BoostBot Lead <bot@projectboost.tech>',
-      to: CEO_EMAILS.split(','),
-      subject: 'BoostBot: ¡Nuevo Lead de Negocio Capturado!',
-      html: ceoEmailBody,
-    });
-
     // 2. Si el usuario dejó su email, enviarle la confirmación
     if (userEmail) {
         const userEmailBody = `
