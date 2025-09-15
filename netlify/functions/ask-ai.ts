@@ -5,36 +5,37 @@ import knowledgeBase from "../../src/data/knowledgeBase";
 
 const { HF_TOKEN, RESEND_API_KEY, CEO_EMAILS } = process.env;
 
-const fallbackMessage = "Actualmente no contamos con esa informacion en nuestra pagina, pero le daremos a conocer tu consulta a los CEO de Project Boost para poderte brindar una respuesta";
-
 const systemPrompt = `
-  Eres un asistente virtual experto de la empresa "Project Boost". Tu nombre es "BoostBot".
-  Tu única fuente de información es la base de conocimiento que te proporciono. NUNCA debes inventar información.
-  Tu tarea es analizar la pregunta del usuario y determinar si se puede responder con la base de conocimiento.
-  Debes devolver SIEMPRE tu respuesta en un formato JSON VÁLIDO, con dos campos: "answered" (un booleano) y "response" (un string).
+  Eres un asistente virtual experto de "Project Boost" llamado "BoostBot". Tu tarea es triple:
+  1. Ser un experto en la empresa usando la base de conocimiento.
+  2. Ser un conversador general y amigable.
+  3. Actuar como un filtro de negocio, identificando consultas importantes.
 
-  - Si la pregunta del usuario SE PUEDE responder con la base de conocimiento:
-    Establece "answered" en true.
-    En el campo "response", escribe la respuesta de forma clara y amable.
+  Debes devolver SIEMPRE tu respuesta en un formato JSON VÁLIDO con dos campos: "isImportantLead" (un booleano) y "responseForUser" (un string).
 
-  - Si la pregunta del usuario NO SE PUEDE responder con la base de conocimiento:
-    Establece "answered" en false.
-    En el campo "response", escribe el siguiente texto EXACTAMENTE: "${fallbackMessage}"
+  Aquí están las reglas para decidir:
 
-  Ejemplo de respuesta si puedes contestar:
-  {
-    "answered": true,
-    "response": "El equipo está formado por Jason Villanueva y Dany Franco, ambos CEO y Desarrolladores Full Stack."
-  }
+  1. **Si la pregunta del usuario SE PUEDE responder con la base de conocimiento:**
+     - "isImportantLead": false
+     - "responseForUser": La respuesta directa y profesional basada en el conocimiento.
 
-  Ejemplo de respuesta si NO puedes contestar:
-  {
-    "answered": false,
-    "response": "${fallbackMessage}"
-  }
+  2. **Si la pregunta NO SE PUEDE responder con la base de conocimiento, debes decidir si es "importante":**
+     - Una pregunta es "IMPORTANTE" si se relaciona con el negocio pero no está en el conocimiento. Ejemplos: preguntas sobre precios, servicios no listados (blockchain, mobile apps), comparaciones con competidores, oportunidades de trabajo, etc.
+     - Una pregunta "NO ES IMPORTANTE" si es conocimiento general o trivial. Ejemplos: "¿Quién es el presidente?", "¿Qué hora es?", "hola".
+
+     - **Si la pregunta NO es importante:**
+       - "isImportantLead": false
+       - "responseForUser": Responde la pregunta usando tu conocimiento general y OBLIGATORIAMENTE añade al final: "\\n\\n¿Quieres saber algo en particular sobre Project Boost?"
+
+     - **Si la pregunta SÍ es importante:**
+       - "isImportantLead": true
+       - "responseForUser": Responde con sinceridad que no tienes esa información específica, pero que has notificado al equipo. Usa este texto EXACTO: "Esa es una excelente pregunta. No tengo la respuesta en mi base de conocimiento, pero he notificado a los CEOs de Project Boost sobre tu consulta y se pondrán en contacto si es necesario. ¿Hay algo más sobre nuestros servicios actuales en lo que pueda ayudarte?"
+
+  Base de Conocimiento:
+  ---
+  ${knowledgeBase}
+  ---
 `;
-
-const fullSystemPrompt = `${systemPrompt}\n\nAquí está la base de conocimiento:\n---\n${knowledgeBase}\n---`;
 
 export const handler: Handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -54,40 +55,26 @@ export const handler: Handler = async (event) => {
 
     const hfResponse = await hf.chatCompletion({
       model: "meta-llama/Meta-Llama-3-8B-Instruct",
-      messages: [{ role: "system", content: fullSystemPrompt }, { role: "user", content: question }],
+      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: question }],
       max_tokens: 500,
     });
 
     const rawResponse = hfResponse.choices[0].message.content || "{}";
     
-    // -- INICIO DE DEBUGGING --
-    console.log("Respuesta cruda de la IA:", rawResponse);
-    // -- FIN DE DEBUGGING --
-    
-    let aiJson: { answered: boolean; response: string };
+    let aiJson: { isImportantLead: boolean; responseForUser: string };
     try {
       aiJson = JSON.parse(rawResponse);
-       // -- INICIO DE DEBUGGING --
-      console.log("JSON parseado exitosamente:", aiJson);
-      // -- FIN DE DEBUGGING --
     } catch (e) {
-      // -- INICIO DE DEBUGGING --
-      console.error("Error al parsear el JSON de la IA. Asumiendo fallback.", e);
-      // -- FIN DE DEBUGGING --
-      aiJson = { answered: false, response: fallbackMessage };
+      aiJson = { isImportantLead: false, responseForUser: "Lo siento, tuve un problema para procesar tu solicitud." };
     }
 
-    // Lógica de email basada en el booleano
-    if (aiJson.answered === false) {
-      // -- INICIO DE DEBUGGING --
-      console.log("Condición cumplida. Intentando enviar email de notificación...");
-      // -- FIN DE DEBUGGING --
+    if (aiJson.isImportantLead === true) {
       await sendNotificationEmail(question, CEO_EMAILS, RESEND_API_KEY);
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ answer: aiJson.response }),
+      body: JSON.stringify({ answer: aiJson.responseForUser }),
     };
 
   } catch (error) {
@@ -99,17 +86,9 @@ export const handler: Handler = async (event) => {
   }
 };
 
-// Función auxiliar para enviar el email
 async function sendNotificationEmail(question: string, ceoEmails: string, resendApiKey: string) {
-  // -- INICIO DE DEBUGGING AVANZADO --
-  console.log("Iniciando sendNotificationEmail...");
-  console.log("Emails de CEO:", ceoEmails);
-  console.log("Longitud de la Resend API Key:", resendApiKey ? resendApiKey.length : 0);
-  // -- FIN DE DEBUGGING AVANZADO --
-
   const resend = new Resend(resendApiKey);
 
-  // Generar saludo dinámico
   const hour = new Date().getHours();
   let greeting = "Buenos días";
   if (hour >= 12 && hour < 19) {
@@ -118,7 +97,6 @@ async function sendNotificationEmail(question: string, ceoEmails: string, resend
     greeting = "Buenas noches";
   }
 
-  // Formatear la fecha
   const date = new Date().toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',
@@ -128,36 +106,26 @@ async function sendNotificationEmail(question: string, ceoEmails: string, resend
 
   const emailBody = `
     <p>${greeting} CEO de Project Boost,</p>
-    <p>El día <strong>${date}</strong>, un usuario le hizo una consulta a nuestro bot BoostBot de la cual no se tiene la información suficiente en el sitio web para brindarle una respuesta.</p>
-    <p>Te dejo la consulta del usuario por aquí:</p>
+    <p>El día <strong>${date}</strong>, un usuario ha realizado una <strong>consulta de negocio importante</strong> para la cual el BoostBot no encontró una respuesta en la base de conocimiento.</p>
+    <p>Esta consulta ha sido identificada como una oportunidad potencial o un punto a mejorar en nuestra web.</p>
+    <p><strong>Pregunta del usuario:</strong></p>
     <blockquote style="border-left: 4px solid #ccc; padding-left: 16px; margin: 16px 0; color: #555;">
       ${question}
     </blockquote>
-    <p>Espero pronto podás agregar información referente a esa consulta, ¡ten un excelente día!</p>
+    <p>Saludos,<br>Tu Asistente BoostBot</p>
   `;
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'BoostBot <bot@projectboost.tech>',
       to: ceoEmails.split(','),
-      subject: 'BoostBot: Consulta de Usuario sin Respuesta',
+      subject: 'BoostBot: ¡Consulta de Negocio Importante!',
       html: emailBody,
     });
-
     if (error) {
-      // -- INICIO DE DEBUGGING AVANZADO --
       console.error("Error devuelto por la API de Resend:", error);
-      // -- FIN DE DEBUGGING AVANZADO --
-      return;
     }
-
-    // -- INICIO DE DEBUGGING AVANZADO --
-    console.log("Email enviado exitosamente. ID de Resend:", data?.id);
-    // -- FIN DE DEBUGGING AVANZADO --
-    
   } catch (emailError) {
-    // -- INICIO DE DEBUGGING AVANZADO --
     console.error("Error catastrófico al intentar enviar el email:", emailError);
-    // -- FIN DE DEBUGGING AVANZADO --
   }
 }
